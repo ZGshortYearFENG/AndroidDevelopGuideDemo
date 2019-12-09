@@ -125,7 +125,7 @@ data scheme: http or https
 ```
 请记住，同一意图过滤器中的所有<data>元素都合并在一起以说明其组合属性的所有变化。例如，上面的第一个intent过滤器包含一个<data>元素，该元素仅声明HTTPS方案。但是它与其他<data>元素组合在一起，因此意图过滤器同时支持`http://www.example.com`和`https://www.example.com`。因此，当您要定义URI方案和域的特定组合时，必须创建单独的意图过滤器。
 
-#### 支持多subdomains
+#### 支持多子域名
 Digital Asset Links协议将您的意图过滤器中的子域视为唯一的独立主机。因此，如果您的意图过滤器列出了具有不同子域的多个主机，则必须在每个域上发布一个有效的assetlinks.json。例如，以下意图过滤器包括`www.example.com`和`mobile.example.com`作为接受的意图URL主机。因此，必须在`https://www.example.com/.well-known/assetlinks.json`和`https://mobile.example.com/.well-known/assetlinks.json`上发布有效的assetlinks.json。
 ```
 <application>
@@ -161,6 +161,7 @@ Digital Asset Links协议将您的意图过滤器中的子域视为唯一的独�
 package_name 包名
 
 sha256_cert_fingerprints 应用程序的签名证书的SHA256指纹。
+
 您可以使用以下命令通过Java密钥工具生成指纹：
 ```
 $ keytool -list -v -keystore my-release-key.keystore
@@ -231,7 +232,77 @@ $ keytool -list -v -keystore my-release-key.keystore
 }]
 ```
 
+## Deep links唤起Android app的实现原理
+浏览器点击URI之后，启动相应app，其实关键在 WebView 的 WebViewClient 的 shouldOverrideUrlLoading 方法，基本上所有的浏览器都会有类似的实现，下面分析 Android 浏览器的源码
 
+Android 6.0 的原生浏览器的 shouldOverrideUrlLoading 方法的核心实现在 UrlHandler 这个类中。
+```
+boolean shouldOverrideUrlLoading(Tab tab, WebView view, String url) {
+    ...
+    // The "about:" schemes are internal to the browser; don't want these to
+    // be dispatched to other apps.
+    if (url.startsWith("about:")) {
+        return false;
+    }
+    ...
+    if (startActivityForUrl(tab, url)) {
+        return true;
+    }
+    if (handleMenuClick(tab, url)) {
+        return true;
+    }
+    return false;
+}
+```
+从上面代码中可以看到 scheme 也不能为 about，这是原生浏览器内部用的，唤起 app 的关键在 startActivityForUrl 方法。
+```
+boolean startActivityForUrl(Tab tab, String url) {
+    Intent intent;
+    // perform generic parsing of the URI to turn it into an Intent.
+    try {
+        intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+    } catch (URISyntaxException ex) {
+        Log.w("Browser", "Bad URI " + url + ": " + ex.getMessage());
+        return false;
+    }
+    // check whether the intent can be resolved. If not, we will see
+    // whether we can download it from the Market.
+    ResolveInfo r = null;
+    try {
+        r = mActivity.getPackageManager().resolveActivity(intent, 0);
+    } catch (Exception e) {
+        return false;
+    }
+    ...
+    // sanitize the Intent, ensuring web pages can not bypass browser
+    // security (only access to BROWSABLE activities).
+    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+    intent.setComponent(null);
+    Intent selector = intent.getSelector();
+    if (selector != null) {
+    selector.addCategory(Intent.CATEGORY_BROWSABLE);
+    selector.setComponent(null);
+    }
+    ...
+    try {
+        intent.putExtra(BrowserActivity.EXTRA_DISABLE_URL_OVERRIDE, true);
+    if (mActivity.startActivityIfNeeded(intent, -1)) { // 唤起 app 的最终代码在这里
+        // before leaving BrowserActivity, close the empty child tab.
+        // If a new tab is created through JavaScript open to load this
+        // url, we would like to close it as we will load this url in a
+        // different Activity.
+        mController.closeEmptyTab();
+            return true;
+        }
+    } catch (ActivityNotFoundException ex) {
+        // ignore the error. If no application can handle the URL,
+        // eg about:blank, assume the browser can handle it.
+    }
+    return false;
+}
+```
+上面intent.addCategory(Intent.CATEGORY_BROWSABLE);也可以看出我们之前在 加<category android:name="android.intent.category.BROWSABLE" />的原因。
+而如果第三方的浏览器在这个地方对 scheme 屏蔽，就可以让 web 唤起 app 实效，微信中网页不能唤起应用就是这个原因。
 
 
 
