@@ -44,7 +44,7 @@ ps：两个意图过滤器的区别仅在于data元素。尽管有可能在同�
   <data android:scheme="app" android:host="open.my.app" />
 </intent-filter>
 ```
-似乎这仅支持https://www.example.com和app：//open.my.app。但是，它实际上支持这两个，以及以下两个：app：//www.example.com和https://open.my.app。 将带有活动内容的URI的Intent过滤器添加到应用清单后，Android便可以在运行时将所有具有匹配URI的Intent路由到您的应用。
+似乎这仅支持`https://www.example.com`和`app：//open.my.app`。但是，它实际上支持这两个，以及以下两个：`app：//www.example.com`和`https://open.my.app`。 将带有活动内容的URI的Intent过滤器添加到应用清单后，Android便可以在运行时将所有具有匹配URI的Intent路由到您的应用。
 
 ### 2/ 从Intent中获取数据
 ````
@@ -78,11 +78,11 @@ Android App链接是一种特殊的深层链接，它允许您的网站URL立即
 ```
 android:autoVerify="true"的作用系统检查所有意图过滤器，包括
 
-<action>: android.intent.action.VIEW
+action: android.intent.action.VIEW
 
-<category>: android.intent.category.BROWSABLE and android.intent.category.DEFAULT
+category: android.intent.category.BROWSABLE and android.intent.category.DEFAULT
 
-<data> scheme: http or https
+data scheme: http or https
 
 ```
 <activity ...>
@@ -99,7 +99,7 @@ android:autoVerify="true"的作用系统检查所有意图过滤器，包括
 ```
 对于在上述意图过滤器中找到的每个唯一主机名，Android会在https：//hostname/.well-known/assetlinks.json的相应网站上查询Digital Asset Links文件。
 
-支持多hosts
+#### 支持多hosts
 ```
 <application>
 
@@ -123,10 +123,10 @@ android:autoVerify="true"的作用系统检查所有意图过滤器，包括
 
 </application>
 ```
-请记住，同一意图过滤器中的所有<data>元素都合并在一起以说明其组合属性的所有变化。例如，上面的第一个intent过滤器包含一个<data>元素，该元素仅声明HTTPS方案。但是它与其他<data>元素组合在一起，因此意图过滤器同时支持http://www.example.com和https://www.example.com。因此，当您要定义URI方案和域的特定组合时，必须创建单独的意图过滤器。
+请记住，同一意图过滤器中的所有<data>元素都合并在一起以说明其组合属性的所有变化。例如，上面的第一个intent过滤器包含一个<data>元素，该元素仅声明HTTPS方案。但是它与其他<data>元素组合在一起，因此意图过滤器同时支持`http://www.example.com`和`https://www.example.com`。因此，当您要定义URI方案和域的特定组合时，必须创建单独的意图过滤器。
 
-支持多subdomains
-Digital Asset Links协议将您的意图过滤器中的子域视为唯一的独立主机。因此，如果您的意图过滤器列出了具有不同子域的多个主机，则必须在每个域上发布一个有效的assetlinks.json。例如，以下意图过滤器包括www.example.com和mobile.example.com作为接受的意图URL主机。因此，必须在https://www.example.com/.well-known/assetlinks.json和https://mobile.example.com/.well-known/assetlinks.json上发布有效的assetlinks.json。
+#### 支持多subdomains
+Digital Asset Links协议将您的意图过滤器中的子域视为唯一的独立主机。因此，如果您的意图过滤器列出了具有不同子域的多个主机，则必须在每个域上发布一个有效的assetlinks.json。例如，以下意图过滤器包括`www.example.com`和`mobile.example.com`作为接受的意图URL主机。因此，必须在`https://www.example.com/.well-known/assetlinks.json`和`https://mobile.example.com/.well-known/assetlinks.json`上发布有效的assetlinks.json。
 ```
 <application>
   <activity android:name=”MainActivity”>
@@ -140,7 +140,7 @@ Digital Asset Links协议将您的意图过滤器中的子域视为唯一的独�
   </activity>
 </application>
 ```
-或者，如果用通配符声明主机名（例如* .example.com），则必须在根主机名（example.com）上发布assetlinks.json文件。例如，只要assetlinks.json文件发布在https://example.com/，具有以下意图过滤器的应用将通过example.com的任何子名称（例如foo.example.com）的验证。 .well-known / assetlinks.json：
+或者，如果用通配符声明主机名（例如* .example.com），则必须在根主机名（example.com）上发布assetlinks.json文件。例如，只要assetlinks.json文件发布在`https://example.com/`，具有以下意图过滤器的应用将通过example.com的任何子名称（例如foo.example.com）的验证。 .well-known / assetlinks.json：
 ```
 <application>
   <activity android:name=”MainActivity”>
@@ -179,9 +179,9 @@ $ keytool -list -v -keystore my-release-key.keystore
 }]
 ```
 
-一个网站连接多个app
+#### 一个网站连接多个app
 
-网站可以在同一assetlinks.json文件中声明与多个应用程序的关联。以下文件清单显示了一个声明文件的示例，该文件分别声明与两个应用程序的关联，并且位于https://www.example.com/.well-known/assetlinks.json：
+网站可以在同一assetlinks.json文件中声明与多个应用程序的关联。以下文件清单显示了一个声明文件的示例，该文件分别声明与两个应用程序的关联，并且位于`https://www.example.com/.well-known/assetlinks.json`：
 ```
 [{
   "relation": ["delegate_permission/common.handle_all_urls"],
@@ -202,9 +202,9 @@ $ keytool -list -v -keystore my-release-key.keystore
   }
 }]
 ```
-不同的应用程序可以处理同一Web主机下不同资源的链接。例如，app1可以声明https://example.com/articles的意图过滤器，而app2可以声明https://example.com/videos的意图过滤器。
+不同的应用程序可以处理同一Web主机下不同资源的链接。例如，app1可以声明`https://example.com/articles`的意图过滤器，而app2可以声明`https://example.com/videos`的意图过滤器。
 
-多个网站连接一个app
+#### 多个网站连接一个app
 
 多个网站可以在各自的assetlinks.json文件中声明与同一应用程序的关联。以下文件列表显示了如何声明example.com和example.net与app1的关联的示例。第一个清单显示example.com与app1的关联：
 ```
