@@ -1,24 +1,13 @@
-# DeepLink
+# Deep links
+  Deep links是将用户直接带到您应用程序中特定内容的URL。在Android中，您可以通过添加意图过滤器并从传入的意图中提取数据来建立深层链接，以将用户带入正确的活动。 但是，如果用户设备上安装的其他应用程序可以处理相同的意图，则用户可能不会直接进入您的应用程序。例如，单击来自银行的电子邮件中的URL可能会导致一个对话框，询问用户是使用浏览器还是使用银行自己的应用程序打开链接。而Android App Link是基于DeepLink，Android 6.0（API级别23）及更高版本上的Android App链接允许应用程序将自身指定为给定类型的链接的默认处理程序。如果用户不希望该应用程序成为默认处理程序，则可以从其设备的系统设置中覆盖此行为。
+  Android App Links的好处就是，安全且特定：Android应用程序链接使用HTTP URL链接到您拥有的网站域，因此没有其他应用程序可以使用您的链接。 Android App链接的要求之一是，您可以通过我们的网站关联方法之一来验证您对域的所有权。无缝的用户体验：由于Android应用程序链接使用单个HTTP URL来访问您的网站和应用程序中的相同内容，因此未安装该应用程序的用户只需访问您的网站而不是该应用程序即可。
 
-DeepLink and Android App Links
-deeplink
-深度链接是将用户直接带到您应用程序中特定内容的URL。在Android中，您可以通过添加意图过滤器并从传入的意图中提取数据来建立深层链接，以将用户带入正确的活动。 但是，如果用户设备上安装的其他应用程序可以处理相同的意图，则用户可能不会直接进入您的应用程序。例如，单击来自银行的电子邮件中的URL可能会导致一个对话框，询问用户是使用浏览器还是使用银行自己的应用程序打开链接。
+## 创建Deeplinks步骤：
 
-android app links
-Android 6.0（API级别23）及更高版本上的Android App链接允许应用程序将自身指定为给定类型的链接的默认处理程序。如果用户不希望该应用程序成为默认处理程序，则可以从其设备的系统设置中覆盖此行为。
-
-applinks好处
-安全且特定：Android应用程序链接使用HTTP URL链接到您拥有的网站域，因此没有其他应用程序可以使用您的链接。 Android App链接的要求之一是，您可以通过我们的网站关联方法之一来验证您对域的所有权。
-无缝的用户体验：由于Android应用程序链接使用单个HTTP URL来访问您的网站和应用程序中的相同内容，因此未安装该应用程序的用户只需访问您的网站而不是该应用程序即可-无404错误，没有错误。
-Android Instant Apps支持：使用Android Instant Apps，您的用户无需安装就可以运行您的Android应用程序。要将Instant App支持添加到您的Android应用，请设置Android应用链接并访问g.co/InstantApps。
-通过Google搜索吸引用户：用户可以通过以下方式直接在您的应用中打开特定内容：在移动浏览器中，Google搜索应用中，Android上的屏幕搜索中或通过Google助手点击Google的网址。
-
-创建Deeplinks步骤：
-
-添加intent-filter
+### 1/ 添加intent-filter
 <action> 指定ACTION_VIEW，以便可以访问意向过滤器
 <data> 添加一个或多个<data>标记，每个标记代表一种解析为活动的URI格式。至少，<data>标签必须包含android：scheme属性。 您可以添加更多属性，以进一步优化活动接受的URI类型。例如，您可能有多个活动接受相似的URI，但仅基于路径名而有所不同。在这种情况下，请使用android：path属性或其pathPattern或pathPrefix变体来区分系统应针对不同URI路径打开的活动
-<category> 包括BROWSABLE类别。为了使意图过滤器可以从Web浏览器访问，这是必需的。没有它，单击浏览器中的链接将无法解析到您的应用。 还包括DEFAULT类别。这使您的应用可以响应隐式意图。否则，仅在意图指定您的应用程序组件名称时才能启动活动。
+<category> 包括BROWSABLE。为了使intent-filter可以从Web浏览器访问，这是必需的。没有它，单击浏览器中的链接将无法解析到您的应用。 还包括DEFAULT。这使您的应用可以响应隐式意图。否则，仅在意图指定您的应用程序组件名称时才能启动活动。
 
 ```
 <activity
@@ -56,7 +45,7 @@ Android Instant Apps支持：使用Android Instant Apps，您的用户无需安�
 ```
 似乎这仅支持https://www.example.com和app：//open.my.app。但是，它实际上支持这两个，以及以下两个：app：//www.example.com和https://open.my.app。 将带有活动内容的URI的Intent过滤器添加到应用清单后，Android便可以在运行时将所有具有匹配URI的Intent路由到您的应用。
 
-从Intent中获取数据
+### 2/ 从Intent中获取数据
 ```
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -67,12 +56,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-为深层链接添加验证：将您的应用配置为请求验证应用链接。然后，在您的网站上发布Digital Asset Links JSON文件，以通过Google Search Console验证所有权。在验证应用链接中了解更多信息。
-
+## 创建Android App Links步骤
 Android App链接是一种特殊的深层链接，它允许您的网站URL立即打开Android应用程序中的相应内容（无需用户选择应用程序）。 要将Android应用程序链接添加到您的应用程序，请定义意图过滤器，这些意图过滤器使用HTTP URL打开您的应用程序内容（如创建应用程序内容的深层链接中所述），并验证您是否拥有您的应用程序和网站URL（如本指南中所述） ）。如果系统成功验证您拥有这些URL，则系统会自动将这些URL意图路由到您的应用程序。
 
-Request app links verification
-要为您的应用启用链接处理验证，请在应用清单中包含android.intent.action.VIEW意向操作和android.intent.category.BROWSABLE的任意一个Web URL意向过滤器中设置android：autoVerify =“ true”意向类别，如以下清单代码片段所示：
+### 1/ 请求应用链接验证
+要为您的应用启用链接处理验证，请在应用清单中包含android.intent.action.VIEW和android.intent.category.BROWSABLE的任意一个Web URL意向过滤器中设置android：autoVerify =“ true”，如以下清单代码片段所示：
 
 ```
 <activity ...>
@@ -87,11 +75,13 @@ Request app links verification
 
 </activity>
 ```
-android:autoVerify="true"的作用
-系统检查所有意图过滤器，包括
-Action: android.intent.action.VIEW
-Categories: android.intent.category.BROWSABLE and android.intent.category.DEFAULT
-Data scheme: http or https
+android:autoVerify="true"的作用系统检查所有意图过滤器，包括
+
+<action>: android.intent.action.VIEW
+
+<category>: android.intent.category.BROWSABLE and android.intent.category.DEFAULT
+
+<data> scheme: http or https
 
 ```
 <activity ...>
@@ -107,6 +97,7 @@ Data scheme: http or https
 </activity>
 ```
 对于在上述意图过滤器中找到的每个唯一主机名，Android会在https：//hostname/.well-known/assetlinks.json的相应网站上查询Digital Asset Links文件。
+
 支持多hosts
 ```
 <application>
@@ -163,9 +154,11 @@ Digital Asset Links协议将您的意图过滤器中的子域视为唯一的独�
 ```
 
 
-声明网站关联
+### 2/ 声明网站关联
 必须在您的网站上发布Digital Asset Links JSON文件，以指示与该网站关联的Android应用程序并验证该应用程序的URL意图。 JSON文件使用以下字段来标识关联的应用程序：
+
 package_name 包名
+
 sha256_cert_fingerprints 应用程序的签名证书的SHA256指纹。
 您可以使用以下命令通过Java密钥工具生成指纹：
 ```
@@ -186,6 +179,7 @@ $ keytool -list -v -keystore my-release-key.keystore
 ```
 
 一个网站连接多个app
+
 网站可以在同一assetlinks.json文件中声明与多个应用程序的关联。以下文件清单显示了一个声明文件的示例，该文件分别声明与两个应用程序的关联，并且位于https://www.example.com/.well-known/assetlinks.json：
 ```
 [{
@@ -210,6 +204,7 @@ $ keytool -list -v -keystore my-release-key.keystore
 不同的应用程序可以处理同一Web主机下不同资源的链接。例如，app1可以声明https://example.com/articles的意图过滤器，而app2可以声明https://example.com/videos的意图过滤器。
 
 多个网站连接一个app
+
 多个网站可以在各自的assetlinks.json文件中声明与同一应用程序的关联。以下文件列表显示了如何声明example.com和example.net与app1的关联的示例。第一个清单显示example.com与app1的关联：
 ```
 [{
