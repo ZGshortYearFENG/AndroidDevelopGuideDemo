@@ -5,11 +5,14 @@
 ## 创建Deeplinks步骤：
 
 ### 1/ 添加intent-filter
-<action> 指定ACTION_VIEW，以便可以访问意向过滤器
-<data> 添加一个或多个<data>标记，每个标记代表一种解析为活动的URI格式。至少，<data>标签必须包含android：scheme属性。 您可以添加更多属性，以进一步优化活动接受的URI类型。例如，您可能有多个活动接受相似的URI，但仅基于路径名而有所不同。在这种情况下，请使用android：path属性或其pathPattern或pathPrefix变体来区分系统应针对不同URI路径打开的活动
-<category> 包括BROWSABLE。为了使intent-filter可以从Web浏览器访问，这是必需的。没有它，单击浏览器中的链接将无法解析到您的应用。 还包括DEFAULT。这使您的应用可以响应隐式意图。否则，仅在意图指定您的应用程序组件名称时才能启动活动。
 
-```
+action: 指定ACTION_VIEW，以便可以访问意向过滤器
+
+data: 添加一个或多个<data>标记，每个标记代表一种解析为活动的URI格式。至少，<data>标签必须包含android：scheme属性。 您可以添加更多属性，以进一步优化活动接受的URI类型。例如，您可能有多个活动接受相似的URI，但仅基于路径名而有所不同。在这种情况下，请使用android：path属性或其pathPattern或pathPrefix变体来区分系统应针对不同URI路径打开的活动
+
+category: 包括BROWSABLE。为了使intent-filter可以从Web浏览器访问，这是必需的。没有它，单击浏览器中的链接将无法解析到您的应用。 还包括DEFAULT。这使您的应用可以响应隐式意图。否则，仅在意图指定您的应用程序组件名称时才能启动活动。
+
+````
 <activity
     android:name="com.example.android.GizmosActivity"
     android:label="@string/title_gizmos" >
@@ -32,10 +35,8 @@
               android:host="gizmos" />
     </intent-filter>
 </activity>
-```
-
-请注意，两个意图过滤器的区别仅在于<data>元素。尽管有可能在同一个过滤器中包含多个<data>元素，但是当您要声明唯一的URL（例如方案和主机的特定组合）时，创建单独的过滤器很重要，因为实际上，同一意图过滤器会合并在一起，以说明其组合属性的所有变化。例如，考虑以下内容：
-
+````
+ps：两个意图过滤器的区别仅在于data元素。尽管有可能在同一个过滤器中包含多个data元素，但是当您要声明唯一的URL（例如方案和主机的特定组合）时，创建单独的过滤器很重要，因为实际上，同一意图过滤器会合并在一起，以说明其组合属性的所有变化。例如，考虑以下内容：
 ```
 <intent-filter>
   ...
@@ -46,7 +47,7 @@
 似乎这仅支持https://www.example.com和app：//open.my.app。但是，它实际上支持这两个，以及以下两个：app：//www.example.com和https://open.my.app。 将带有活动内容的URI的Intent过滤器添加到应用清单后，Android便可以在运行时将所有具有匹配URI的Intent路由到您的应用。
 
 ### 2/ 从Intent中获取数据
-```
+````
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.main)
@@ -54,7 +55,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
     val action: String? = intent?.action
     val data: Uri? = intent?.data
 }
-```
+````
 
 ## 创建Android App Links步骤
 Android App链接是一种特殊的深层链接，它允许您的网站URL立即打开Android应用程序中的相应内容（无需用户选择应用程序）。 要将Android应用程序链接添加到您的应用程序，请定义意图过滤器，这些意图过滤器使用HTTP URL打开您的应用程序内容（如创建应用程序内容的深层链接中所述），并验证您是否拥有您的应用程序和网站URL（如本指南中所述） ）。如果系统成功验证您拥有这些URL，则系统会自动将这些URL意图路由到您的应用程序。
