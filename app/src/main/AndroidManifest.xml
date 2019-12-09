@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="fengzj.sample.androiddevelopguidedemo">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 接受以 "http://yaoyi.ypzdw.com/article" 或 "https://yaoyi.ypzdw.com/article"开头的URIs -->
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="yaoyi.ypzdw.com" />
+                <!-- android:pathPrefix="/article" 这里表示匹配Path以“/article”开头的uri，可以不写 -->
+                <data android:pathPrefix="/article" />
+                <!-- 注意 "/" 在pathPrefix中是必须的 -->
+            </intent-filter>
+            <intent-filter>
+
+                <!-- action 和category 必须这样写！！！ -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 这里采用的是自定义Scheme -->
+                <!-- 接受以 "com.ypzdw.zdb://article"开头的URIs -->
+                <data
+                    android:host="article"
+                    android:scheme="com.ypzdw.zdb" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

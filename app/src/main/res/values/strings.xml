@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AndroidDevelopGuideDemo</string>
+    <string name="title_activity_deep_link">DeepLinkActivity</string>
+</resources>
