@@ -235,6 +235,8 @@ $ keytool -list -v -keystore my-release-key.keystore
 Deeplink和Android app links都需要在AndroidManifest中声明`action android:name="android.intent.action.VIEW"`，`category android:name="android.intent.category.DEFAULT"`，`category android:name="android.intent.category.BROWSABLE"`
 Android app links还需要多添加一个`android:autoVerify="true"`，它的作用就是让Android系统在安装app的时候去检查，对应host路径的json文件是否符合要求，成功验证后之后可快速安全的通过URI跳转到app当中，不用多余的对话框
 
+避免多次创建deeplinkactivity可以设置android:launchMode="singleTask"，通过onNewIntent处理intent。
+
 下面简单来描述下点击URI到跳转到app的实现过程
 
 ## Deep links大概的实现原理
