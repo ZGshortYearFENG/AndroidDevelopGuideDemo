@@ -10,7 +10,7 @@ data: 添加一个或多个data标记，每个标记代表一种解析为活动�
 
 category:
 BROWSABLE，使intent-filter可以从Web浏览器访问。
-DEFAULT，使可以响应隐式意图。DEFAULT，使可以响应隐式意图。DEFAULT，使可以响应隐式意图。DEFAULT，使可以响应隐式意图。
+DEFAULT，使可以响应隐式意图。
 
 ````
 <activity ...>
