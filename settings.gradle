@@ -1,2 +1,2 @@
-include ':app', ':activity'
+include ':app'
 rootProject.name='AndroidDevelopGuideDemo'
