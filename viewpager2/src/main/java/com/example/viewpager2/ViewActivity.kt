@@ -14,15 +14,18 @@ class ViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
-
-        // adapter
         viewpager2.adapter = CardViewAdapter()
-        // ok
     }
 
 
 }
 
+/**
+ * Viewpager2父类是ViewGroup，用RecyclerView展示数据，所以展示view布局用RecyclerView.Adapter作为viewpager2的adapter
+ * FragmentStateAdapter同样也是继承RecyclerView.Adapter
+ * FragmentStateAdapter.onCreateViewHolder 调用FragmentViewHolder.create加载一个FrameLayout作为Fragment的载体
+ * onBindViewHolder 先判断显示的fragment是不是正确的fragment，否则移除，然后走placeFragmentInViewHolder方法插入对应的fragment
+ */
 class CardViewAdapter : RecyclerView.Adapter<CardViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         return CardViewHolder(

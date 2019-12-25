@@ -11,6 +11,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.activity_transformer.*
 
+/**
+ * ViewPager2 Transformer使用
+ */
 class TransformerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

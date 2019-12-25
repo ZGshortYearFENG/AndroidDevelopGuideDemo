@@ -4,7 +4,6 @@
 viewpager2支持orientation切换  
 viewpager2支持RTL  
 viewpager2支持notifyDataSetChanged  
-fakeDragBy  
 Diff Util  
 
 

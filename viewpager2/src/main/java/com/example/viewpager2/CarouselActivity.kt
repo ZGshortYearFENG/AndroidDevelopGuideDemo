@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import kotlinx.android.synthetic.main.activity_carousel.*
 
+/**
+ * Viewpager2轮播
+ */
 class CarouselActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
