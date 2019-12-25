@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':viewpager2'
 rootProject.name='AndroidDevelopGuideDemo'
