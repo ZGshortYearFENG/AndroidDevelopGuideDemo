@@ -30,6 +30,12 @@ class MainActivity : ListActivity() {
                 "intent" to Intent(this, TriangleActivity::class.java)
             )
         )
+        data.add(
+            mapOf(
+                "title" to "Square",
+                "intent" to Intent(this, SquareActivity::class.java)
+            )
+        )
         return data
     }
 
