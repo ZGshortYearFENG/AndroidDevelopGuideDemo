@@ -36,6 +36,12 @@ class MainActivity : ListActivity() {
                 "intent" to Intent(this, SquareActivity::class.java)
             )
         )
+        data.add(
+            mapOf(
+                "title" to "Texture",
+                "intent" to Intent(this, TextureActivity::class.java)
+            )
+        )
         return data
     }
 
